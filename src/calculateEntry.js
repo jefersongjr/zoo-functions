@@ -1,31 +1,40 @@
 const data = require('../data/zoo_data');
+const { prices } = require('../data/zoo_data');
 
 const entrant2s = [
   { name: 'Lara Carvalho', age: 5 },
-  { name: 'Frederico Moreira', age: 5 },
-  { name: 'Pedro Henrique Carvalho', age: 5 },
-  { name: 'Maria Costa', age: 18 },
-  { name: 'Núbia Souza', age: 18 },
-  { name: 'Carlos Nogueira', age: 50 },
+  { name: 'Núbia Souza', age: 50 },
 ];
 
-function countEntrants(entrants) {
-  const childs = entrants.filter((ages) => ages.age < 18);
-  const adults = entrants.filter((ages) => ages.age >= 18 && ages.age < 50);
-  const seniors = entrants.filter((ages) => ages.age >= 50);
-  const objectAges = { childs, adults, seniors };
+function countEntrants(entrants = {}) {
+  if (Object.keys(entrants).length === 0) {
+    return 0;
+  }
+  const objEntrants = entrants.filter((a) => a.age);
+  const child = objEntrants.filter((ages) => ages.age < 18);
+  const adult = objEntrants.filter((ages) => ages.age >= 18 && ages.age < 50);
+  const senior = objEntrants.filter((ages) => ages.age >= 50);
+  const objectAges = { child, adult, senior };
   const allAges = Object.keys(objectAges);
   const ageValues = Object.values(objectAges);
   return ({
     [allAges[0]]: ageValues[0].length,
-    [allAges[2]]: ageValues[1].length,
-    [allAges[1]]: ageValues[2].length,
+    [allAges[1]]: ageValues[1].length,
+    [allAges[2]]: ageValues[2].length,
   });
 }
 
 function calculateEntry(entrants) {
-  // seu código aqui
+  if (countEntrants(entrants) === 0) {
+    return 0;
+  }
+  const entrantsObject = countEntrants(entrants);
+  const childrens = entrantsObject.child * prices.child;
+  const adults = entrantsObject.adult * prices.adult;
+  const senior = entrantsObject.senior * prices.senior;
+  const total = childrens + adults + senior;
+  return total;
 }
 
-console.log(countEntrants(entrant2s));
+console.log(calculateEntry(entrant2s));
 module.exports = { calculateEntry, countEntrants };
