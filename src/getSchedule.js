@@ -1,11 +1,11 @@
 const { species, hours } = require('../data/zoo_data');
 const data = require('../data/zoo_data');
 
-/* const onlyName = (animal) => {
+const onlyName = (animal) => {
   const animals = species.find((name) => name.name === animal);
   const availabilityDay = animals.availability;
   return availabilityDay;
-}; */
+};
 
 const createObj = (day, hour, exib) => ({
   [day]: {
@@ -29,11 +29,20 @@ const dayExibition = (dayWeek) => {
 const allDays = Object.keys(hours);
 
 function getSchedule(scheduleTarget) {
+  const filterAnimals = species.some((specie) => specie.name === scheduleTarget);
+  const dayList = Object.keys(hours);
+  const validateDays = dayList.some((day2) => day2 === scheduleTarget);
+  if (filterAnimals) {
+    return onlyName(scheduleTarget);
+  }
+  if (validateDays) {
+    return dayExibition(scheduleTarget);
+  }
   const allDaysFunc = allDays.map((x) => dayExibition(x));
   const [tuesday, wednesday, thursday, friday, saturday, sunday, monday] = allDaysFunc;
   const objDays1 = {
     ...tuesday, ...wednesday, ...thursday, ...friday, ...saturday, ...sunday, ...monday };
   return objDays1;
 }
-console.log(getSchedule());
+
 module.exports = getSchedule;
