@@ -28,13 +28,17 @@ const byId = (employee) => {
   };
 };
 
-function getEmployeesCoverage(employee) {
+function getEmployeesCoverage(employee = {}) {
+  if (Object.keys(employee).length === 0) {
+    const allPersons = employees.filter((allPerson) => allPerson);
+    return allPersons;
+  }
   if (employee.id !== undefined) {
     return byId(employee);
   }
   return byName(employee);
 }
 
-console.log(getEmployeesCoverage({ id: 'c1f50212-35a6-4ecd-8223-f835538526c2' }));
+console.log(getEmployeesCoverage());
 
 module.exports = getEmployeesCoverage;
